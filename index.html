@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOSTER-SS | Authority Panel</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark-bg: #050505;
+            --card-bg: #111111;
+            --input-bg: #000000;
+            --text-gray: #888888;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container { width: 100%; max-width: 420px; padding: 15px; }
+
+        /* Luxury Card Styling */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid #222;
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 15px 50px rgba(212, 175, 55, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        h1 { font-size: 28px; color: var(--gold); letter-spacing: 4px; margin-bottom: 5px; text-transform: uppercase; }
+        p.subtitle { color: var(--text-gray); font-size: 12px; margin-bottom: 30px; letter-spacing: 1px; }
+
+        /* Form Styling */
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-left: 5px; }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            margin-top: 8px;
+            background: var(--input-bg);
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--gold); outline: none; }
+
+        /* Buttons */
+        .btn-main {
+            width: 100%;
+            padding: 18px;
+            background: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            margin-top: 10px;
+        }
+
+        .btn-main:hover { background: #fff; transform: scale(1.02); }
+
+        .hidden { display: none; }
+
+        /* Dashboard Specifics */
+        .status-indicator {
+            display: inline-block;
+            padding: 6px 15px;
+            background: rgba(0, 255, 0, 0.15);
+            color: #00ff00;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .alert-text { font-size: 11px; color: #ff4d4d; margin-top: 15px; }
+        .history-log { margin-top: 25px; border-top: 1px solid #222; padding-top: 20px; font-size: 11px; color: #555; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div id="authSection" class="card">
+            <h1>Booster-SS</h1>
+            <p class="subtitle">AUTHORITY ACCESS REQUIRED</p>
+            
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="userName" placeholder="Keches1">
+            </div>
+
+            <div class="input-group">
+                <label>Network Email</label>
+                <input type="email" id="userEmail" placeholder="network@king.com">
+            </div>
+
+            <div class="input-group">
+                <label>Secure Password</label>
+                <input type="password" id="userPass" placeholder="••••••••">
+            </div>
+
+            <button class="btn-main" onclick="enterDashboard()">Unlock Network</button>
+            <p style="font-size: 10px; color: #444; margin-top: 20px;">CRYPTO PAYMENT NETWORK: BEP20 (USDT)</p>
+        </div>
+
+        <div id="dashSection" class="card hidden">
+            <div class="status-indicator">● PHANTOM ENGINE READY</div>
+            <h1>CONTROL HUB</h1>
+            <p class="subtitle" id="welcomeMsg"></p>
+
+            <div class="input-group">
+                <label>Target Platform</label>
+                <select id="platformSelect">
+                    <option value="Audiomack">Audiomack Plays</option>
+                    <option value="TikTok">TikTok Views/Followers</option>
+                    <option value="Spotify">Spotify Streams</option>
+                    <option value="YouTube">YouTube Watchtime</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Target Music/Profile Link</label>
+                <input type="text" id="targetLink" placeholder="Paste link here...">
+            </div>
+
+            <div class="input-group">
+                <label>Boost Amount (Limit: 50)</label>
+                <input type="number" id="boostAmount" value="50" max="50">
+            </div>
+
+            <button class="btn-main" onclick="triggerBoost()">Launch Phantom</button>
+            
+            <div class="alert-text">SAFETY PROTOCOL: Max 50 per session to avoid detection.</div>
+
+            <div class="history-log">
+                RECENT ACTIVITY: <br>
+                <span id="lastAction">No active sessions yet.</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // HANDLE LOGIN
+        function enterDashboard() {
+            const name = document.getElementById('userName').value;
+            if(name) {
+                document.getElementById('welcomeMsg').innerText = "Logged in as: " + name;
+                document.getElementById('authSection').classList.add('hidden');
+                document.getElementById('dashSection').classList.remove('hidden');
+            } else {
+                alert("Identity verification required.");
+            }
+        }
+
+        // TRIGGER THE BOT
+        function triggerBoost() {
+            const link = document.getElementById('targetLink').value;
+            const amount = document.getElementById('boostAmount').value;
+            const platform = document.getElementById('platformSelect').value;
+
+            if(!link) {
+                alert("Please paste the link first.");
+                return;
+            }
+
+            if(amount > 50) {
+                alert("Caution: For security, do not exceed 50 per time.");
+                return;
+            }
+
+            // REDIRECT TO GITHUB ACTIONS (THE CONTROL ROOM)
+            alert("Redirecting to " + platform + " Authority Room. Click 'Run Workflow' to start.");
+            window.open("https://github.com/keches1/booster-ss/actions", "_blank");
+            
+            document.getElementById('lastAction').innerText = platform + " boost of " + amount + " plays initiated.";
+        }
+    </script>
+</body>
+</html>
+
