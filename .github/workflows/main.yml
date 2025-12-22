@@ -1,0 +1,32 @@
+name: Moremen Control Panel
+on:
+  workflow_dispatch:
+    inputs:
+      song_url:
+        description: 'Paste Link (Audiomack/TikTok/Spotify)'
+        required: true
+      play_count:
+        description: 'Amount (Max 50)'
+        required: true
+        default: '50'
+
+jobs:
+  boost:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install Tools
+        run: pip install selenium webdriver-manager
+
+      - name: Execute Phantom
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GH_TOKEN }}
+        run: python bot.py "${{ github.event.inputs.song_url }}" "${{ github.event.inputs.play_count }}"
+        
