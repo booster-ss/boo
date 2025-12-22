@@ -3,197 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOOSTER-SS | Authority Panel</title>
+    <title>PHANTOM GLOBAL | Enterprise Command Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --gold: #d4af37;
-            --dark-bg: #050505;
-            --card-bg: #111111;
-            --input-bg: #000000;
-            --text-gray: #888888;
-        }
+        :root { --gold: #d4af37; --bg: #050505; --card: #111; --border: #222; --text: #888; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: #fff; display: flex; height: 100vh; overflow: hidden; }
 
-        body {
-            background-color: var(--dark-bg);
-            color: white;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+        /* --- SIDEBAR --- */
+        .sidebar { width: 280px; background: #000; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; transition: 0.3s; }
+        .logo { color: var(--gold); font-size: 20px; font-weight: 800; letter-spacing: 2px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        .nav-group { margin-bottom: 25px; }
+        .nav-label { font-size: 11px; color: #444; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        .nav-item { padding: 12px 15px; color: var(--text); display: flex; align-items: center; gap: 12px; cursor: pointer; border-radius: 8px; transition: 0.2s; margin-bottom: 5px; font-size: 14px; }
+        .nav-item:hover, .nav-item.active { background: #1a1a1a; color: var(--gold); }
+        .nav-item i { width: 20px; text-align: center; }
 
-        .app-container { width: 100%; max-width: 420px; padding: 15px; }
+        /* --- MAIN CONTENT --- */
+        .content { flex: 1; overflow-y: auto; padding: 40px; }
+        .view { display: none; animation: fadeIn 0.4s ease; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Luxury Card Styling */
-        .card {
-            background: var(--card-bg);
-            border: 1px solid #222;
-            border-radius: 25px;
-            padding: 35px;
-            box-shadow: 0 15px 50px rgba(212, 175, 55, 0.1);
-            text-align: center;
-            position: relative;
-        }
+        /* --- UI COMPONENTS --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 16px; position: relative; overflow: hidden; }
+        .card h4 { color: var(--text); font-size: 12px; text-transform: uppercase; margin-bottom: 10px; }
+        .card .value { font-size: 28px; font-weight: 700; color: var(--gold); }
+        .card .trend { font-size: 12px; color: #00ff00; margin-top: 5px; }
 
-        h1 { font-size: 28px; color: var(--gold); letter-spacing: 4px; margin-bottom: 5px; text-transform: uppercase; }
-        p.subtitle { color: var(--text-gray); font-size: 12px; margin-bottom: 30px; letter-spacing: 1px; }
+        /* --- TABLES & LISTS --- */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: var(--card); border-radius: 12px; overflow: hidden; }
+        th { text-align: left; padding: 15px; background: #1a1a1a; color: var(--gold); font-size: 12px; }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 13px; color: #ccc; }
 
-        /* Form Styling */
-        .input-group { margin-bottom: 20px; text-align: left; }
-        label { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-left: 5px; }
-        
-        input, select {
-            width: 100%;
-            padding: 15px;
-            margin-top: 8px;
-            background: var(--input-bg);
-            border: 1px solid #333;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 14px;
-            box-sizing: border-box;
-            transition: 0.3s;
-        }
-
-        input:focus { border-color: var(--gold); outline: none; }
-
-        /* Buttons */
-        .btn-main {
-            width: 100%;
-            padding: 18px;
-            background: var(--gold);
-            color: #000;
-            border: none;
-            border-radius: 12px;
-            font-weight: 900;
-            font-size: 14px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.4s;
-            margin-top: 10px;
-        }
-
-        .btn-main:hover { background: #fff; transform: scale(1.02); }
-
-        .hidden { display: none; }
-
-        /* Dashboard Specifics */
-        .status-indicator {
-            display: inline-block;
-            padding: 6px 15px;
-            background: rgba(0, 255, 0, 0.15);
-            color: #00ff00;
-            border-radius: 50px;
-            font-size: 10px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .alert-text { font-size: 11px; color: #ff4d4d; margin-top: 15px; }
-        .history-log { margin-top: 25px; border-top: 1px solid #222; padding-top: 20px; font-size: 11px; color: #555; }
+        /* --- BOOTSTRAP BUTTONS --- */
+        .btn-main { background: var(--gold); color: #000; border: none; padding: 15px 30px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="sidebar">
+        <div class="logo"><i class="fas fa-ghost"></i> PHANTOM</div>
         
-        <div id="authSection" class="card">
-            <h1>Booster-SS</h1>
-            <p class="subtitle">AUTHORITY ACCESS REQUIRED</p>
-            
-            <div class="input-group">
-                <label>Full Name</label>
-                <input type="text" id="userName" placeholder="Keches1">
-            </div>
-
-            <div class="input-group">
-                <label>Network Email</label>
-                <input type="email" id="userEmail" placeholder="network@king.com">
-            </div>
-
-            <div class="input-group">
-                <label>Secure Password</label>
-                <input type="password" id="userPass" placeholder="••••••••">
-            </div>
-
-            <button class="btn-main" onclick="enterDashboard()">Unlock Network</button>
-            <p style="font-size: 10px; color: #444; margin-top: 20px;">CRYPTO PAYMENT NETWORK: BEP20 (USDT)</p>
+        <div class="nav-group">
+            <span class="nav-label">Core Systems</span>
+            <div class="nav-item active" onclick="showView('v-dash')"><i class="fas fa-th-large"></i> Dashboard</div>
+            <div class="nav-item" onclick="showView('v-boost')"><i class="fas fa-rocket"></i> Launch Boost</div>
+            <div class="nav-item" onclick="showView('v-history')"><i class="fas fa-history"></i> Order History</div>
         </div>
 
-        <div id="dashSection" class="card hidden">
-            <div class="status-indicator">● PHANTOM ENGINE READY</div>
-            <h1>CONTROL HUB</h1>
-            <p class="subtitle" id="welcomeMsg"></p>
+        <div class="nav-group">
+            <span class="nav-label">Community</span>
+            <div class="nav-item" onclick="showView('v-leader')"><i class="fas fa-crown"></i> Leaderboard</div>
+            <div class="nav-item" onclick="showView('v-subs')"><i class="fas fa-users"></i> Subscribers</div>
+            <div class="nav-item" onclick="showView('v-msg')"><i class="fas fa-envelope"></i> Messages <span style="background:red; color:#fff; padding:2px 6px; border-radius:10px; font-size:10px; margin-left:auto;">4</span></div>
+        </div>
 
-            <div class="input-group">
-                <label>Target Platform</label>
-                <select id="platformSelect">
-                    <option value="Audiomack">Audiomack Plays</option>
-                    <option value="TikTok">TikTok Views/Followers</option>
-                    <option value="Spotify">Spotify Streams</option>
-                    <option value="YouTube">YouTube Watchtime</option>
-                </select>
+        <div class="nav-group">
+            <span class="nav-label">Account</span>
+            <div class="nav-item" onclick="showView('v-wallet')"><i class="fas fa-wallet"></i> Wallet (BEP20)</div>
+            <div class="nav-item" onclick="showView('v-settings')"><i class="fas fa-cog"></i> Settings</div>
+            <div class="nav-item" onclick="showView('v-support')"><i class="fas fa-headset"></i> Support Desk</div>
+        </div>
+
+        <div class="nav-item" style="margin-top:auto; color:#ff4444;"><i class="fas fa-sign-out-alt"></i> Logout</div>
+    </div>
+
+    <div class="content">
+        
+        <div id="v-dash" class="view active">
+            <h2>System Overview</h2>
+            <div class="grid">
+                <div class="card"><h4>Active Nodes</h4><div class="value">412</div><div class="trend">● System Online</div></div>
+                <div class="card"><h4>Total Revenue</h4><div class="value">$128,402</div><div class="trend">+12.4% this week</div></div>
+                <div class="card"><h4>Network Load</h4><div class="value">14%</div><div class="trend">Optimal Performance</div></div>
             </div>
+            <h3>Recent Global Activity</h3>
+            <table>
+                <tr><th>User</th><th>Platform</th><th>Service</th><th>Status</th></tr>
+                <tr><td>@king_dev</td><td>TikTok</td><td>+5k Followers</td><td><span style="color:green">Completed</span></td></tr>
+                <tr><td>@music_pro</td><td>Audiomack</td><td>+10k Plays</td><td><span style="color:var(--gold)">In Progress</span></td></tr>
+            </table>
+        </div>
 
-            <div class="input-group">
-                <label>Target Music/Profile Link</label>
-                <input type="text" id="targetLink" placeholder="Paste link here...">
+        <div id="v-boost" class="view">
+            <h2>Launch New Engine</h2>
+            <div class="card" style="max-width: 500px;">
+                <label style="color:var(--gold); font-size:12px;">PLATFORM SELECTION</label>
+                <select id="platform"><option>TikTok Enterprise</option><option>Audiomack VIP</option><option>Spotify Verified</option></select>
+                <label style="color:var(--gold); font-size:12px;">TARGET LINK</label>
+                <input type="text" placeholder="Paste link here..." style="width:100%; padding:15px; background:#000; border:1px solid #333; color:#fff; border-radius:8px; margin-top:5px;">
+                <button class="btn-main">ACTIVATE PHANTOM ENGINE</button>
             </div>
+        </div>
 
-            <div class="input-group">
-                <label>Boost Amount (Limit: 50)</label>
-                <input type="number" id="boostAmount" value="50" max="50">
+        <div id="v-leader" class="view">
+            <h2>Top Boosters (2025)</h2>
+            <div class="grid">
+                <div class="card" style="text-align:center;"><i class="fas fa-medal" style="color:gold; font-size:40px;"></i><h3>#1 Legend</h3><p>2.4M Streams</p></div>
+                <div class="card" style="text-align:center;"><i class="fas fa-medal" style="color:silver; font-size:40px;"></i><h3>#2 Alpha</h3><p>1.8M Streams</p></div>
             </div>
+        </div>
 
-            <button class="btn-main" onclick="triggerBoost()">Launch Phantom</button>
-            
-            <div class="alert-text">SAFETY PROTOCOL: Max 50 per session to avoid detection.</div>
-
-            <div class="history-log">
-                RECENT ACTIVITY: <br>
-                <span id="lastAction">No active sessions yet.</span>
+        <div id="v-support" class="view">
+            <h2>Support Desk</h2>
+            <div class="about-box" style="background:#111; padding:20px; border-radius:10px; border-left:4px solid var(--gold);">
+                <h4>Need help?</h4>
+                <p>Phantom Global Support is active 24/7. Founded in <b>2018</b>, we have assisted over 100k artists.</p>
+                <button class="btn-main" style="width:auto;">Open New Ticket</button>
             </div>
         </div>
 
     </div>
 
     <script>
-        // HANDLE LOGIN
-        function enterDashboard() {
-            const name = document.getElementById('userName').value;
-            if(name) {
-                document.getElementById('welcomeMsg').innerText = "Logged in as: " + name;
-                document.getElementById('authSection').classList.add('hidden');
-                document.getElementById('dashSection').classList.remove('hidden');
-            } else {
-                alert("Identity verification required.");
-            }
-        }
-
-        // TRIGGER THE BOT
-        function triggerBoost() {
-            const link = document.getElementById('targetLink').value;
-            const amount = document.getElementById('boostAmount').value;
-            const platform = document.getElementById('platformSelect').value;
-
-            if(!link) {
-                alert("Please paste the link first.");
-                return;
-            }
-
-            if(amount > 50) {
-                alert("Caution: For security, do not exceed 50 per time.");
-                return;
-            }
-
-            // REDIRECT TO GITHUB ACTIONS (THE CONTROL ROOM)
-            alert("Redirecting to " + platform + " Authority Room. Click 'Run Workflow' to start.");
-            window.open("https://github.com/keches1/booster-ss/actions", "_blank");
-            
-            document.getElementById('lastAction').innerText = platform + " boost of " + amount + " plays initiated.";
+        function showView(id) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            // Remove active class from nav
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            // Show selected view
+            document.getElementById(id).classList.add('active');
+            // Set current nav as active
+            event.currentTarget.classList.add('active');
         }
     </script>
 </body>
