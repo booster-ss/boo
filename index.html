@@ -6,262 +6,227 @@
     <title>PHANTOM | Forensic Multi-Bot</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --gold: #d4af37; --bg: #050505; --card: #111; --border: #222; --green: #00ff00; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; transition: 0.3s; }
+        :root { --gold: #d4af37; --bg: #050505; --card: #111; --border: #222; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
         body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; }
 
-        /* --- GHOST ANIMATION --- */
-        @keyframes flyGhost {
-            0% { transform: translate(-100px, 100vh) rotate(0deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translate(120vw, -200px) rotate(360deg); opacity: 0; }
-        }
-        .ghost-anim { position: fixed; font-size: 50px; color: var(--gold); z-index: 9999; pointer-events: none; display: none; }
-
-        /* --- AUTHENTICATION --- */
+        /* --- AUTH & SECRET TRIGGER --- */
         #authGate { position: fixed; inset: 0; background: #000; z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .secret-trigger { position: absolute; top: 0; right: 0; width: 60px; height: 60px; z-index: 9999; cursor: pointer; }
         .auth-box { background: var(--card); border: 1px solid var(--border); width: 100%; max-width: 380px; padding: 30px; border-radius: 25px; text-align: center; }
-        input, select { width: 100%; padding: 15px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: var(--gold); border-radius: 12px; outline: none; font-size: 14px; }
+        input, select { width: 100%; padding: 15px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: var(--gold); border-radius: 12px; outline: none; }
         .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
 
-        /* --- MAIN LAYOUT --- */
+        /* --- INTERACTIVE MODAL (MEANINGFUL CONTENT) --- */
+        #modalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 8000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .terminal-box { background: #000; border: 1px solid var(--gold); width: 100%; max-width: 400px; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 0 40px rgba(212,175,55,0.1); }
+        .m-content { font-size: 14px; color: #ccc; margin: 20px 0; line-height: 1.6; }
+
+        /* --- UI LAYOUT --- */
         #appBody { display: none; height: 100vh; flex-direction: column; }
         .header { height: 65px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: #000; }
-        
-        /* SIDEBAR (13+1 System) */
-        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100vh; background: #000; z-index: 5000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-right: 1px solid var(--border); padding-top: 80px; }
+        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100vh; background: #000; z-index: 5000; transition: 0.4s; border-right: 1px solid var(--border); padding-top: 80px; }
         .sidebar.active { left: 0; }
-        .side-item { padding: 18px 25px; border-bottom: 1px solid #111; display: flex; align-items: center; gap: 15px; cursor: pointer; font-size: 14px; color: #888; }
-        .side-item.active { color: var(--gold); background: #0a0a0a; }
-        #adminLink { display: none; color: var(--gold); border: 1px dashed var(--gold); margin: 10px; border-radius: 8px; font-weight: bold; }
+        .side-item { padding: 18px 25px; border-bottom: 1px solid #111; display: flex; align-items: center; gap: 15px; cursor: pointer; font-size: 13px; color: #888; }
+        .side-item.active, .side-item:hover { color: var(--gold); background: #0a0a0a; }
 
-        /* CONTENT VIEWS */
-        .content { flex: 1; padding: 20px; overflow-y: auto; padding-top: 10px; }
-        .view { display: none; animation: slideUp 0.4s ease; }
+        .content { flex: 1; padding: 20px; overflow-y: auto; }
+        .view { display: none; }
         .view.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* CARDS */
         .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 16px; margin-bottom: 15px; }
-        .stat-val { font-size: 24px; font-weight: 700; color: var(--gold); }
         
-        /* CHAT UI */
-        .chat-box { height: 300px; background: #000; border: 1px solid #222; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; margin-top: 10px; }
-        #chatDisplay { flex: 1; overflow-y: auto; padding: 15px; font-size: 13px; }
-        .ai-msg { color: var(--gold); background: #1a1a1a; padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--gold); }
-        .user-msg { color: #fff; background: #333; padding: 10px; border-radius: 8px; margin-bottom: 10px; align-self: flex-end; }
-
-        /* 30+ SETTINGS GRID */
+        /* SETTINGS GRID */
         .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .set-btn { background: #080808; border: 1px solid #222; padding: 15px; border-radius: 12px; text-align: center; font-size: 10px; cursor: pointer; }
+        .set-btn { background: #0a0a0a; border: 1px solid #222; padding: 20px; border-radius: 15px; text-align: center; font-size: 11px; cursor: pointer; }
+        .set-btn i { color: var(--gold); margin-bottom: 8px; font-size: 18px; }
+
+        /* HISTORY TABLE */
+        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px; }
+        th { text-align: left; color: var(--gold); padding-bottom: 10px; border-bottom: 1px solid #222; }
+        td { padding: 10px 0; border-bottom: 1px solid #111; color: #888; }
     </style>
 </head>
 <body onload="initApp()">
 
-    <div class="ghost-anim" id="ghost"><i class="fas fa-ghost"></i></div>
+    <div id="modalOverlay">
+        <div class="terminal-box">
+            <h3 id="mTitle" style="color:var(--gold); text-transform:uppercase;">SYSTEM LOG</h3>
+            <div class="m-content" id="mContent">Initializing...</div>
+            <div id="mActions">
+                <button class="btn-gold" id="confirmBtn" style="margin-bottom:10px;">PROCEED</button>
+                <button onclick="closeModal()" style="background:none; border:none; color:#555; cursor:pointer;">CANCEL</button>
+            </div>
+        </div>
+    </div>
 
     <div id="authGate">
+        <div class="secret-trigger" onclick="handleTaps()"></div>
         <div class="auth-box">
-            <h2 style="color:var(--gold); letter-spacing:2px;">PHANTOM CORE</h2>
-            <p style="font-size:11px; color:#444; margin-bottom:20px;">v5.0 NEURAL FORENSIC ACCESS</p>
+            <h2 style="color:var(--gold);">PHANTOM OS</h2>
+            <p style="font-size:11px; color:#444; margin-bottom:20px;">v5.1 FORENSIC ACCESS</p>
             <input type="text" id="regName" placeholder="Full Name">
-            <input type="email" id="regEmail" placeholder="Email Address">
-            <button class="btn-gold" onclick="finishReg()">INITIALIZE SYSTEM</button>
+            <input type="email" placeholder="Email (Optional)">
+            <button class="btn-gold" onclick="register()">INITIALIZE CORE</button>
         </div>
     </div>
 
     <div id="appBody">
         <div class="header">
-            <i class="fas fa-bars" onclick="toggleSide()" style="font-size:22px; cursor:pointer; color:var(--gold);"></i>
-            <div style="color:var(--gold); font-weight:900; letter-spacing:4px;"><i class="fas fa-ghost"></i> PHANTOM</div>
-            <div id="notif-area" onclick="showPage('v-support')"><i class="fas fa-bell"></i><span id="notif-dot" style="background:red; width:8px; height:8px; border-radius:50%; position:absolute; display:none;"></span></div>
+            <i class="fas fa-bars" onclick="toggleSide()" style="color:var(--gold); cursor:pointer; font-size:20px;"></i>
+            <div style="color:var(--gold); font-weight:900; letter-spacing:4px;">PHANTOM</div>
+            <i class="fas fa-history" onclick="showView('v-history')" style="color:var(--gold); cursor:pointer;"></i>
         </div>
 
         <div class="sidebar" id="sidebar">
-            <div class="side-item active" onclick="showPage('v-dash')"><i class="fas fa-th-large"></i> Dashboard</div>
-            <div class="side-item" onclick="showPage('v-boost')"><i class="fas fa-rocket"></i> Launch Engine</div>
-            <div class="side-item" onclick="showPage('v-wallet')"><i class="fas fa-wallet"></i> Wallet (BEP20)</div>
-            <div class="side-item" onclick="showPage('v-support')"><i class="fas fa-headset"></i> AI Forensic Support</div>
-            <div class="side-item" onclick="showPage('v-settings')"><i class="fas fa-cog"></i> Advanced Settings</div>
-            <div class="side-item" onclick="alert('Module Online')"><i class="fas fa-server"></i> Node Network</div>
-            <div class="side-item" onclick="alert('Module Online')"><i class="fas fa-link"></i> BEP20 Bridge</div>
-            <div class="side-item" onclick="alert('Module Online')"><i class="fas fa-sync"></i> Swap Engine</div>
-            <div class="side-item" onclick="alert('Module Online')"><i class="fas fa-user-shield"></i> Vault Security</div>
-            <div class="side-item" onclick="alert('Module Online')"><i class="fas fa-chart-line"></i> Live Analytics</div>
-            <div class="side-item" onclick="alert('Module Online')"><i class="fas fa-crown"></i> Leaderboard</div>
-            <div class="side-item" onclick="alert('Module Online')"><i class="fas fa-microchip"></i> Mining Core</div>
-            <div class="side-item" onclick="alert('Module Online')"><i class="fas fa-layer-group"></i> Smart Staking</div>
-            
-            <div id="adminLink" class="side-item" onclick="showPage('v-admin')"><i class="fas fa-user-secret"></i> ADMIN CONTROL</div>
+            <div class="side-item active" onclick="showView('v-dash')"><i class="fas fa-th-large"></i> DASHBOARD</div>
+            <div class="side-item" onclick="showView('v-boost')"><i class="fas fa-rocket"></i> LAUNCH ENGINE</div>
+            <div class="side-item" onclick="showView('v-history')"><i class="fas fa-list"></i> BATCH HISTORY</div>
+            <div class="side-item" onclick="showView('v-settings')"><i class="fas fa-cog"></i> NODE TOOLS</div>
+            <div id="adminLink" class="side-item" style="display:none; color:var(--gold);" onclick="showView('v-admin')"><i class="fas fa-user-secret"></i> ADMIN CORE</div>
+            <div class="side-item" style="margin-top:auto; color:red;" onclick="openModule('System Logout')"><i class="fas fa-power-off"></i> LOGOUT</div>
         </div>
 
         <div class="content">
             <div id="v-dash" class="view active">
-                <div class="card">
-                    <h4>Active Phantom Nodes</h4>
-                    <div class="stat-val">14,208 Online</div>
-                </div>
-                <div class="card">
-                    <h4>Estimated BEP20 Revenue</h4>
-                    <div class="stat-val">$128,402.00</div>
-                </div>
-                <button class="btn-gold" onclick="showPage('v-boost')">OPEN LAUNCHER</button>
+                <div class="card"><h4>Revenue Generated</h4><div style="font-size:24px; color:var(--gold);">$128,402.00</div></div>
+                <div class="card"><h4>BEP20 Wallet (BSC)</h4><p style="font-size:11px; color:#555;">0x71C...6F</p></div>
+                <button class="btn-gold" onclick="showView('v-boost')">START NEW BATCH</button>
             </div>
 
             <div id="v-boost" class="view">
                 <h3>LAUNCH ENGINE</h3>
                 <div class="card">
-                    <label>Platform Selection</label>
-                    <select id="platform">
-                        <option>TikTok Followers</option>
-                        <option>TikTok Views/Likes</option>
-                        <option>Audiomack Plays/Likes</option>
+                    <label style="font-size:11px; color:var(--gold);">SELECT SERVICE</label>
+                    <select id="srv">
+                        <optgroup label="AUDIOMACK">
+                            <option>Audiomack Plays</option>
+                            <option>Audiomack Followers</option>
+                            <option>Audiomack Likes</option>
+                        </optgroup>
+                        <optgroup label="TIKTOK">
+                            <option>TikTok Followers</option>
+                            <option>TikTok Likes</option>
+                            <option>TikTok Shares</option>
+                            <option>TikTok Saves</option>
+                        </optgroup>
+                        <optgroup label="YOUTUBE">
+                            <option>YouTube Views</option>
+                            <option>YouTube Likes</option>
+                            <option>YouTube Subscribers</option>
+                        </optgroup>
                     </select>
-                    <label>Target URL</label>
-                    <input type="text" id="target_url" placeholder="Paste link here...">
-                    <button class="btn-gold" onclick="startBoost()">ACTIVATE ENGINE</button>
+                    
+                    <label style="font-size:11px; color:var(--gold);">TARGET LINK</label>
+                    <input type="text" id="url" placeholder="https://...">
+                    
+                    <label style="font-size:11px; color:var(--gold);">BATCH AMOUNT (MIN: 50)</label>
+                    <input type="number" id="amt" value="50" min="50">
+                    
+                    <button class="btn-gold" onclick="startBoost()">ACTIVATE GITHUB NODE</button>
                 </div>
             </div>
 
-            <div id="v-wallet" class="view">
-                <h3>CRYPTO WALLET</h3>
-                <div class="card" style="border: 1px dashed var(--gold);">
-                    <label>BEP20 BINANCE SMART CHAIN</label>
-                    <p style="word-break: break-all; margin: 10px 0; color:var(--gold); font-size:12px;">0x71C7656EC7ab88b098defB751B7401B5f6d8976F</p>
-                    <button class="btn-gold" style="padding:10px;" onclick="copyWallet()">COPY ADDRESS</button>
-                </div>
-            </div>
-
-            <div id="v-support" class="view">
-                <h3>PHANTOM AI SUPPORT</h3>
-                <div class="chat-box">
-                    <div id="chatDisplay">
-                        <div class="ai-msg">Forensic Bridge Active. IP Logging Enabled. Describe your issue...</div>
-                    </div>
-                    <div style="display:flex; padding:10px; border-top:1px solid #222;">
-                        <input type="text" id="userInput" placeholder="Type error...">
-                        <button onclick="processAI()" style="background:var(--gold); border:none; padding:10px; border-radius:8px; margin-left:5px;"><i class="fas fa-paper-plane"></i></button>
-                    </div>
+            <div id="v-history" class="view">
+                <h3>BATCH HISTORY</h3>
+                <div class="card">
+                    <table>
+                        <thead><tr><th>Service</th><th>Amount</th><th>Status</th></tr></thead>
+                        <tbody id="histBody">
+                            <tr><td>Audiomack Plays</td><td>5,000</td><td style="color:#00ff00;">COMPLETED</td></tr>
+                            <tr><td>TikTok Followers</td><td>250</td><td style="color:#00ff00;">COMPLETED</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <div id="v-settings" class="view">
-                <div style="display:flex; justify-content:space-between;">
-                    <h3 style="color:var(--gold);">ADVANCED SETTINGS</h3>
-                    <button onclick="showPage('v-dash')" style="background:none; border:none; color:#555;">[Back]</button>
-                </div>
-                <div class="settings-grid" style="margin-top:15px;">
+                <h3>ADVANCED TOOLS</h3>
+                <div class="settings-grid">
                     <script>
                         const opts = ["IP Scrambler", "Proxy Rotate", "DB Wipe", "Node Force", "SSL Bypass", "Traffic Inject", "Hash Cracker", "Wallet Clone", "API Overwrite", "User Ban", "Fee Mod", "Audit Log", "Handshake Fix", "Header Reset", "Latency Cut", "Bot Filter", "Geo Spoofer", "VPN Tunnel", "Key Log", "Meta Scrub", "Cache Flush", "Port Scan", "Ghost Mode", "Firewall Off", "DNS Route", "Salt Hash", "Admin Sync", "Core Update", "Log Eraser", "Auto Exit"];
-                        opts.forEach(o => document.write(`<div class="set-btn" onclick="alert('${o} Activated')"><i class="fas fa-cog"></i><br>${o}</div>`));
+                        opts.forEach(o => document.write(`<div class="set-btn" onclick="openModule('${o}')"><i class="fas fa-microchip"></i><br>${o}</div>`));
                     </script>
                 </div>
             </div>
-
-            <div id="v-admin" class="view">
-                <h3 style="color:var(--gold);">ADMIN RETOUCH PANEL</h3>
-                <div class="card" style="border-style:dashed;">
-                    <p>Live Traffic Overwrite Enabled</p>
-                    <button class="btn-gold" style="background:red; color:white; margin-top:15px;" onclick="localStorage.clear(); location.reload();">ERASE ALL SYSTEM DATA</button>
-                </div>
-            </div>
         </div>
-
-        <form id="emailForm" style="display:none;">
-            <input type="hidden" name="access_key" value="Cfaff0d1-7fd3-4875-b67f-94496b4568c5">
-            <textarea name="message" id="emailBody"></textarea>
-        </form>
     </div>
-
-    <div onclick="countTaps()" style="position:fixed; top:0; right:0; width:50px; height:50px; z-index:9999; opacity:0;"></div>
 
     <script>
         let taps = 0;
-        let userData = { ip: "Fetching...", browser: navigator.userAgent };
-
-        async function initApp() {
-            if(localStorage.getItem('p_reg') === 'true') {
-                document.getElementById('authGate').style.display = 'none';
-                document.getElementById('appBody').style.display = 'flex';
-                if(localStorage.getItem('is_admin') === 'true') document.getElementById('adminLink').style.display = 'flex';
-            }
-            try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                userData.ip = data.ip;
-            } catch(e) { userData.ip = "VPN/Hidden"; }
-        }
-
-        function finishReg() {
-            if(!document.getElementById('regName').value) return alert("Enter Name");
-            localStorage.setItem('p_reg', 'true');
-            initApp();
-        }
-
-        function toggleSide() { document.getElementById('sidebar').classList.toggle('active'); }
-
-        function showPage(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(document.getElementById('sidebar').classList.contains('active')) toggleSide();
-            playGhost();
-        }
-
-        function playGhost() {
-            const g = document.getElementById('ghost');
-            g.style.display = 'block';
-            g.style.animation = 'flyGhost 1.5s linear forwards';
-            setTimeout(() => { g.style.display = 'none'; g.style.animation = ''; }, 1500);
-        }
-
-        function startBoost() {
-            if(!document.getElementById('target_url').value) return alert("Paste Link First!");
-            alert("Bypassing Firewalls... Redirecting to GitHub Action Controller.");
-            window.location.href = "https://github.com/booster-ss/boo/actions";
-        }
-
-        async function processAI() {
-            const input = document.getElementById('userInput');
-            const display = document.getElementById('chatDisplay');
-            const val = input.value.trim();
-            if(!val) return;
-            display.innerHTML += `<div class="user-msg">${val}</div>`;
-            input.value = "";
-            
-            const isError = ["error", "fail", "not work", "bug"].some(t => val.toLowerCase().includes(t));
-            if(isError) {
-                display.innerHTML += `<div class="ai-msg">⚠️ Issue detected. Capturing IP ${userData.ip} and device logs. Sending forensic report to lead developer...</div>`;
-                await sendReport(val);
-                display.innerHTML += `<div class="ai-msg">✅ Report Delivered. Admin notified.</div>`;
-            } else {
-                display.innerHTML += `<div class="ai-msg">System check optimal. How can I help?</div>`;
-            }
-            display.scrollTop = display.scrollHeight;
-        }
-
-        async function sendReport(complaint) {
-            const body = document.getElementById('emailBody');
-            body.value = `PHANTOM FORENSIC REPORT\nCOMPLAINT: ${complaint}\nIP: ${userData.ip}\nDEVICE: ${userData.browser}`;
-            const formData = new FormData(document.getElementById('emailForm'));
-            await fetch('https://api.web3forms.com/submit', { method: 'POST', body: JSON.stringify(Object.fromEntries(formData)), headers: {'Content-Type': 'application/json'} });
-        }
-
-        function countTaps() {
+        function handleTaps() {
             taps++;
             if(taps === 7) {
-                if(prompt("ADMIN KEY:") === "2025_SECURE") {
+                let code = prompt("ENTER ADMIN SECURITY CODE:");
+                if(code === "2025_SECURE") {
                     localStorage.setItem('is_admin', 'true');
-                    location.reload();
+                    alert("Admin Bridge Established.");
                 }
                 taps = 0;
             }
         }
 
-        function copyWallet() {
-            alert("BEP20 Address Copied!");
-            document.getElementById('notif-dot').style.display = 'block';
+        function initApp() {
+            if(localStorage.getItem('p_active')) {
+                document.getElementById('authGate').style.display = 'none';
+                document.getElementById('appBody').style.display = 'flex';
+                if(localStorage.getItem('is_admin')) document.getElementById('adminLink').style.display = 'flex';
+            }
+        }
+
+        function register() {
+            if(!document.getElementById('regName').value) return alert("Credentials required");
+            localStorage.setItem('p_active', 'true');
+            initApp();
+        }
+
+        function toggleSide() { document.getElementById('sidebar').classList.toggle('active'); }
+
+        function showView(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(document.getElementById('sidebar').classList.contains('active')) toggleSide();
+        }
+
+        function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+
+        /* MEANINGFUL INTERACTIVE LOGIC */
+        function openModule(name) {
+            const content = document.getElementById('mContent');
+            const title = document.getElementById('mTitle');
+            const confirm = document.getElementById('confirmBtn');
+            
+            document.getElementById('modalOverlay').style.display = 'flex';
+            title.innerText = name;
+
+            if(name === "System Logout") {
+                content.innerText = "You are about to terminate this neural link. This will encrypt your dashboard and clear the current session. Proceed?";
+                confirm.onclick = () => { localStorage.clear(); location.reload(); };
+            } else if(name === "DB Wipe") {
+                content.innerText = "CRITICAL: This will permanently purge your local activity history and node logs. Do you want to continue?";
+                confirm.onclick = () => { alert("History Cleared"); closeModal(); };
+            } else {
+                content.innerText = "Initializing " + name + " module. This will alter your current node fingerprints to bypass advanced bot detection. Confirm activation?";
+                confirm.onclick = () => { alert(name + " is now ACTIVE."); closeModal(); };
+            }
+        }
+
+        /* BOOST LOGIC WITH GITHUB CONNECT */
+        function startBoost() {
+            const srv = document.getElementById('srv').value;
+            const amt = document.getElementById('amt').value;
+            const url = document.getElementById('url').value;
+
+            if(!url) return alert("Target Link Missing!");
+            if(amt < 50) return alert("Minimum Batch Size is 50!");
+
+            document.getElementById('mTitle').innerText = "NODE INITIALIZED";
+            document.getElementById('mContent').innerText = `Service: ${srv}\nBatch: ${amt}\nTarget: ${url}\n\nConfirming will redirect you to the GitHub Action Controller to execute the real-world boost.`;
+            document.getElementById('modalOverlay').style.display = 'flex';
+            
+            document.getElementById('confirmBtn').onclick = () => {
+                window.location.href = "https://github.com/booster-ss/boo/actions";
+            };
         }
     </script>
 </body>
-    </html>
-    
+</html>
