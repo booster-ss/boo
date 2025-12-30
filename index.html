@@ -1,347 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Mainstream — Social Growth Platform</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0e1117;
-      --card:#161b22;
-      --accent:#4da3ff;
-      --text:#e6edf3;
-      --muted:#9ba3af;
-      --radius:14px;
-    }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
-    body{background:var(--bg);color:var(--text);line-height:1.6;}
-    a{color:inherit;text-decoration:none;}
-    header{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;background:#0b0f14;border-bottom:1px solid #1f2937;}
-    header h1{font-size:22px;font-weight:700;color:var(--accent);}
-    nav a{margin-left:20px;font-weight:500;color:var(--muted);}
-    nav a:hover{color:var(--accent);}
-    .hero{text-align:center;padding:80px 20px;}
-    .hero h2{font-size:42px;margin-bottom:20px;}
-    .hero p{max-width:600px;margin:auto;color:var(--muted);margin-bottom:30px;}
-    .buttons{display:flex;justify-content:center;gap:15px;}
-    .btn{padding:14px 28px;border-radius:var(--radius);background:var(--accent);color:#000;font-weight:600;border:none;cursor:pointer;}
-    .btn.secondary{background:transparent;border:1px solid var(--accent);color:var(--accent);}
-    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:40px;max-width:1000px;margin:auto;}
-    .stat{background:var(--card);padding:25px;border-radius:var(--radius);text-align:center;}
-    .stat h3{font-size:28px;color:var(--accent);}
-    .stat p{color:var(--muted);}
-    .section{padding:60px 40px;max-width:1200px;margin:auto;}
-    .section h2{text-align:center;margin-bottom:40px;}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;}
-    .card{background:var(--card);padding:25px;border-radius:var(--radius);transition:0.3s;cursor:pointer;}
-    .card:hover{transform:translateY(-5px);border:1px solid var(--accent);}
-    .card h3{margin-bottom:10px;}
-    .card p{color:var(--muted);font-size:14px;}
-    .locked{margin-top:15px;font-size:13px;color:var(--accent);}
-    footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid #1f2937;}
-    /* DASHBOARD & SIDEBAR */
-    #dashboard{display:none;flex-direction:row;}
-    #sidebar{width:250px;background:var(--card);padding:20px;border-right:1px solid #1f2937;transition:0.3s;}
-    #sidebar.collapsed{width:60px;}
-    #sidebar ul{list-style:none;}
-    #sidebar ul li{padding:15px;cursor:pointer;border-radius:var(--radius);margin-bottom:5px;transition:0.3s;}
-    #sidebar ul li:hover{background:var(--accent);color:#000;}
-    #sidebar ul li.active{background:var(--accent);color:#000;}
-    #mainContent{flex:1;padding:20px;}
-    .tab-section{display:none;}
-    .tab-section.active{display:block;}
-    /* AUTH MODAL */
-    .auth-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;}
-    .auth-modal .modal{background:var(--card);padding:30px;border-radius:var(--radius);width:320px;}
-    .auth-modal input{width:100%;padding:10px;margin-bottom:15px;border-radius:var(--radius);border:1px solid #1f2937;background:#0e1117;color:#fff;}
-    .auth-modal button{width:100%;padding:12px;border-radius:var(--radius);border:none;background:var(--accent);color:#000;font-weight:600;cursor:pointer;}
-    .auth-modal p{margin-top:10px;text-align:center;color:var(--muted);}
-    /* PAYMENT MODAL */
-    .payment-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;}
-    .payment-modal .modal{background:var(--card);padding:30px;border-radius:var(--radius);width:300px;text-align:center;}
-    select,input{border-radius:var(--radius);padding:8px;width:100%;margin-bottom:10px;background:#0e1117;color:#fff;border:1px solid #1f2937;}
-  </style>
+<meta charset="UTF-8" />
+<title>Mainstream — Social Growth Platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1117; --card:#161b22; --accent:#4da3ff; --text:#e6edf3; --muted:#9ba3af; --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+body{background:var(--bg);color:var(--text);line-height:1.6;}
+a{color:inherit;text-decoration:none;}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;background:#0b0f14;border-bottom:1px solid #1f2937;}
+header h1{font-size:22px;font-weight:700;color:var(--accent);}
+nav a{margin-left:20px;font-weight:500;color:var(--muted);}
+nav a:hover{color:var(--accent);}
+.hero{text-align:center;padding:80px 20px;}
+.hero h2{font-size:42px;margin-bottom:20px;}
+.hero p{max-width:600px;margin:auto;color:var(--muted);margin-bottom:30px;}
+.buttons{display:flex;justify-content:center;gap:15px;}
+.btn{padding:14px 28px;border-radius:var(--radius);background:var(--accent);color:#000;font-weight:600;border:none;cursor:pointer;}
+.btn.secondary{background:transparent;border:1px solid var(--accent);color:var(--accent);}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:40px;max-width:1000px;margin:auto;}
+.stat{background:var(--card);padding:25px;border-radius:var(--radius);text-align:center;}
+.stat h3{font-size:28px;color:var(--accent);}
+.stat p{color:var(--muted);}
+.section{padding:60px 40px;max-width:1200px;margin:auto;}
+.section h2{text-align:center;margin-bottom:40px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;}
+.card{background:var(--card);padding:25px;border-radius:var(--radius);transition:0.3s;cursor:pointer;}
+.card:hover{transform:translateY(-5px);border:1px solid var(--accent);}
+.card h3{margin-bottom:10px;}
+.card p{color:var(--muted);font-size:14px;}
+.locked{margin-top:15px;font-size:13px;color:var(--accent);}
+footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid #1f2937;}
+/* DASHBOARD & SIDEBAR */
+#dashboard{display:none;flex-direction:row;}
+#sidebar{width:250px;background:var(--card);padding:20px;border-right:1px solid #1f2937;transition:0.3s;}
+#sidebar.collapsed{width:60px;}
+#sidebar ul{list-style:none;}
+#sidebar ul li{padding:15px;cursor:pointer;border-radius:var(--radius);margin-bottom:5px;transition:0.3s;}
+#sidebar ul li:hover{background:var(--accent);color:#000;}
+#sidebar ul li.active{background:var(--accent);color:#000;}
+#mainContent{flex:1;padding:20px;}
+.tab-section{display:none;}
+.tab-section.active{display:block;}
+/* AUTH MODAL */
+.auth-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;}
+.auth-modal .modal{background:var(--card);padding:30px;border-radius:var(--radius);width:320px;}
+.auth-modal input{width:100%;padding:10px;margin-bottom:15px;border-radius:var(--radius);border:1px solid #1f2937;background:#0e1117;color:#fff;}
+.auth-modal button{width:100%;padding:12px;border-radius:var(--radius);border:none;background:var(--accent);color:#000;font-weight:600;cursor:pointer;}
+.auth-modal p{margin-top:10px;text-align:center;color:var(--muted);}
+.auth-modal label{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+/* PAYMENT MODAL */
+.payment-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;}
+.payment-modal .modal{background:var(--card);padding:30px;border-radius:var(--radius);width:300px;text-align:center;}
+select,input{border-radius:var(--radius);padding:8px;width:100%;margin-bottom:10px;background:#0e1117;color:#fff;border:1px solid #1f2937;}
+/* NOTIFICATION */
+#notification{position:fixed;top:20px;right:20px;background:var(--accent);color:#000;padding:15px 20px;border-radius:var(--radius);display:none;z-index:9999;}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Mainstream</h1>
-    <nav>
-      <a href="#" id="sidebarToggle">☰</a>
-    </nav>
-  </header>
+<header>
+<h1>Mainstream</h1>
+<nav><a href="#" id="sidebarToggle">☰</a></nav>
+</header>
 
-  <section class="hero">
-    <h2>Grow your social presence — intelligently.</h2>
-    <p>Boost followers, likes, views, and engagement across all major platforms using a fast, reliable, and professional system.</p>
-    <div class="buttons">
-      <button class="btn" id="getStartedBtn">Get Started</button>
-      <button class="btn secondary">View Services</button>
-    </div>
-  </section>
+<section class="hero">
+<h2>Grow your social presence — intelligently.</h2>
+<p>Boost followers, likes, views, and engagement across all major platforms using a fast, reliable, and professional system.</p>
+<div class="buttons">
+<button class="btn" id="getStartedBtn">Get Started</button>
+<button class="btn secondary">View Services</button>
+</div>
+</section>
 
-  <section class="stats">
-    <div class="stat"><h3 id="statUsers">0</h3><p>Users</p></div>
-    <div class="stat"><h3 id="statOrders">0</h3><p>Orders Completed</p></div>
-    <div class="stat"><h3 id="statServices">0</h3><p>Active Services</p></div>
-  </section>
+<section class="stats">
+<div class="stat"><h3 id="statUsers">0</h3><p>Users</p></div>
+<div class="stat"><h3 id="statOrders">0</h3><p>Orders Completed</p></div>
+<div class="stat"><h3 id="statServices">0</h3><p>Active Services</p></div>
+</section>
 
-  <section class="section">
-    <h2>Available Platforms</h2>
-    <div class="cards">
-      <div class="card" data-platform="instagram"><h3>Instagram</h3><p>Followers, Likes, Views, Comments</p><div class="locked">Login to Order</div></div>
-      <div class="card" data-platform="tiktok"><h3>TikTok</h3><p>Followers, Views, Likes, Shares, Comments</p><div class="locked">Login to Order</div></div>
-      <div class="card" data-platform="youtube"><h3>YouTube</h3><p>Subscribers, Views, Likes</p><div class="locked">Login to Order</div></div>
-      <div class="card" data-platform="telegram"><h3>Telegram</h3><p>Members, Post Views</p><div class="locked">Login to Order</div></div>
-      <div class="card" data-platform="spotify"><h3>Spotify</h3><p>Plays, Followers</p><div class="locked">Login to Order</div></div>
-    </div>
-  </section>
+<section class="section">
+<h2>Available Platforms</h2>
+<div class="cards">
+<div class="card" data-platform="instagram"><h3>Instagram</h3><p>Followers, Likes, Views, Comments</p><div class="locked">Login to Order</div></div>
+<div class="card" data-platform="tiktok"><h3>TikTok</h3><p>Followers, Views, Likes, Shares, Comments</p><div class="locked">Login to Order</div></div>
+<div class="card" data-platform="youtube"><h3>YouTube</h3><p>Subscribers, Views, Likes</p><div class="locked">Login to Order</div></div>
+<div class="card" data-platform="telegram"><h3>Telegram</h3><p>Members, Post Views</p><div class="locked">Login to Order</div></div>
+<div class="card" data-platform="spotify"><h3>Spotify</h3><p>Plays, Followers</p><div class="locked">Login to Order</div></div>
+</div>
+</section>
 
-  <footer>© 2025 Mainstream. All rights reserved.</footer>
+<footer>© 2025 Mainstream. All rights reserved.</footer>
 
-  <!-- AUTH MODAL -->
-  <div class="auth-modal" id="authModal">
-    <div class="modal" id="loginForm">
-      <h2>Login</h2>
-      <input type="text" placeholder="Email or Username" id="loginEmail" />
-      <input type="password" placeholder="Password" id="loginPassword" />
-      <button id="loginBtn">Login</button>
-      <p>Don't have an account? <span id="showSignup" style="color:var(--accent);cursor:pointer;">Sign up</span></p>
-    </div>
-    <div class="modal" id="signupForm" style="display:none;">
-      <h2>Sign Up</h2>
-      <input type="text" placeholder="Username" id="signupUsername" />
-      <input type="email" placeholder="Email" id="signupEmail" />
-      <input type="password" placeholder="Password" id="signupPassword" />
-      <button id="signupBtn">Sign Up</button>
-      <p>Already have an account? <span id="showLogin" style="color:var(--accent);cursor:pointer;">Login</span></p>
-    </div>
-  </div>
+<div id="notification"></div>
 
-  <!-- DASHBOARD -->
-  <div id="dashboard">
-    <div id="sidebar">
-      <ul>
-        <li data-tab="homeTab" class="active">Home</li>
-        <li data-tab="servicesTab">Services</li>
-        <li data-tab="ordersTab">Orders</li>
-        <li data-tab="walletTab">Wallet</li>
-        <li data-tab="supportTab">Support</li>
-        <li data-tab="settingsTab">Settings</li>
-      </ul>
-    </div>
-    <div id="mainContent">
-      <div class="tab-section active" id="homeTab"><h2>Welcome to Mainstream Dashboard</h2><p>Select a tab to continue.</p></div>
-<div class="tab-section" id="servicesTab">
-        <h2>Select a Service</h2>
-        <div id="serviceSelection">
-          <p>Choose platform first.</p>
-        </div>
-      </div>
-      <div class="tab-section" id="ordersTab">
-        <h2>Your Orders</h2>
-        <div id="ordersList">No orders yet.</div>
-      </div>
-      <div class="tab-section" id="walletTab">
-        <h2>Wallet</h2>
-        <p>Balance: <span id="userBalance">0</span> <span id="currencySymbol">₦</span></p>
-        <button class="btn" id="addFundsBtn">Add Funds</button>
-      </div>
-      <div class="tab-section" id="supportTab">
-        <h2>Support</h2>
-        <p>Open a ticket or check FAQ.</p>
-      </div>
-      <div class="tab-section" id="settingsTab">
-        <h2>Settings</h2>
-        <p>Change password, update profile, select currency:</p>
-        <select id="currencySelect">
-          <option value="NGN">Naira (₦)</option>
-          <option value="USDT">USDT</option>
-          <option value="USD">USD</option>
-        </select>
-      </div>
-    </div>
-  </div>
+<!-- AUTH MODAL -->
+<div class="auth-modal" id="authModal">
+<div class="modal" id="loginForm">
+<h2>Login</h2>
+<input type="text" placeholder="Email or Username" id="loginEmail" />
+<input type="password" placeholder="Password" id="loginPassword" />
+<label><input type="checkbox" id="rememberMe"/> Remember Me</label>
+<button id="loginBtn">Login</button>
+<p>Don't have an account? <span id="showSignup" style="color:var(--accent);cursor:pointer;">Sign up</span></p>
+</div>
+<div class="modal" id="signupForm" style="display:none;">
+<h2>Sign Up</h2>
+<input type="text" placeholder="Username" id="signupUsername" />
+<input type="email" placeholder="Email" id="signupEmail" />
+<input type="password" placeholder="Password" id="signupPassword" />
+<label><input type="checkbox" id="signupRememberMe"/> Remember Me</label>
+<button id="signupBtn">Sign Up</button>
+<p>Already have an account? <span id="showLogin" style="color:var(--accent);cursor:pointer;">Login</span></p>
+</div>
+</div>
 
-  <!-- PAYMENT MODAL -->
-  <div class="payment-modal" id="paymentModal">
-    <div class="modal">
-      <h3>Recharge Wallet</h3>
-      <select id="paymentMethod">
-        <option value="atm">ATM / Bank Transfer</option>
-        <option value="usdt">USDT</option>
-      </select>
-      <input type="number" placeholder="Amount" id="paymentAmount" />
-      <p id="paymentBonusText">Bonus will be applied automatically</p>
-      <button id="confirmPayment">Confirm Payment</button>
-    </div>
-  </div>
+<!-- DASHBOARD -->
+<div id="dashboard">
+<div id="sidebar">
+<ul>
+<li data-tab="homeTab" class="active">Home</li>
+<li data-tab="servicesTab">Services</li>
+<li data-tab="ordersTab">Orders</li>
+<li data-tab="walletTab">Wallet</li>
+<li data-tab="supportTab">Support</li>
+<li data-tab="settingsTab">Settings</li>
+</ul>
+</div>
+<div id="mainContent">
+<div class="tab-section active" id="homeTab"><h2>Welcome to Mainstream Dashboard</h2><p>Select a tab to continue.</p></div>
+<div class="tab-section" id="servicesTab"><h2>Select a Service</h2><div id="serviceSelection"><p>Choose platform first.</p></div></div>
+<div class="tab-section" id="ordersTab"><h2>Your Orders</h2><div id="ordersList">No orders yet.</div></div>
+<div class="tab-section" id="walletTab"><h2>Wallet</h2><p>Balance: <span id="userBalance">0</span> <span id="currencySymbol">₦</span></p>
+<button class="btn" id="addFundsBtn">Add Funds</button></div>
+<div class="tab-section" id="supportTab"><h2>Support</h2><p>Open a ticket or check FAQ.</p></div>
+<div class="tab-section" id="settingsTab"><h2>Settings</h2><p>Change password, update profile, select currency:</p>
+<select id="currencySelect">
+<option value="NGN">Naira (₦)</option>
+<option value="USDT">USDT</option>
+<option value="USD">USD</option>
+</select></div>
+</div>
+</div>
 
-  <script>
-    // --------- AUTH MODAL ----------
-    const authModal = document.getElementById('authModal');
-    const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
-    const showSignup = document.getElementById('showSignup');
-    const showLogin = document.getElementById('showLogin');
-    const loginBtn = document.getElementById('loginBtn');
-    const signupBtn = document.getElementById('signupBtn');
-    const dashboard = document.getElementById('dashboard');
+<!-- PAYMENT MODAL -->
+<div class="payment-modal" id="paymentModal">
+<div class="modal">
+<h3>Recharge Wallet</h3>
+<select id="paymentMethod">
+<option value="atm">ATM / Bank Transfer</option>
+<option value="usdt">USDT</option>
+</select>
+<input type="number" placeholder="Amount" id="paymentAmount" />
+<p id="paymentBonusText">Bonus will be applied automatically</p>
+<button id="confirmPayment">Confirm Payment</button>
+</div>
+</div>
 
-    function saveUser(user){localStorage.setItem('user', JSON.stringify(user));}
-    function getUser(){return JSON.parse(localStorage.getItem('user'));}
+<script>
+/* --- AUTH --- */
+const authModal=document.getElementById('authModal');
+const loginForm=document.getElementById('loginForm');
+const signupForm=document.getElementById('signupForm');
+const showSignup=document.getElementById('showSignup');
+const showLogin=document.getElementById('showLogin');
+const loginBtn=document.getElementById('loginBtn');
+const signupBtn=document.getElementById('signupBtn');
+const dashboard=document.getElementById('dashboard');
 
-    function updateAuthState(){
-      const user = getUser();
-      if(user){authModal.style.display='none';dashboard.style.display='flex';loadDashboard();}
-      else{authModal.style.display='flex';dashboard.style.display='none';}
-    }
+function saveUser(user,remember){
+  if(remember){localStorage.setItem('user',JSON.stringify(user));}
+  else{sessionStorage.setItem('user',JSON.stringify(user));}
+}
+function getUser(){
+  return JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+}
 
-    showSignup.onclick = ()=>{loginForm.style.display='none'; signupForm.style.display='block';};
-    showLogin.onclick = ()=>{loginForm.style.display='block'; signupForm.style.display='none';};
+function updateAuthState(){
+  const user=getUser();
+  if(user){
+    authModal.style.display='none';
+    dashboard.style.display='flex';
+    document.querySelectorAll('.locked').forEach(e=>e.style.display='none');
+  }else{
+    authModal.style.display='flex';
+    dashboard.style.display='none';
+  }
+}
 
-    loginBtn.onclick = ()=>{
-      const email=document.getElementById('loginEmail').value;
-      const password=document.getElementById('loginPassword').value;
-      if(email && password){saveUser({email});updateAuthState();}
-    }
+showSignup.onclick=()=>{loginForm.style.display='none'; signupForm.style.display='block';};
+showLogin.onclick=()=>{loginForm.style.display='block'; signupForm.style.display='none';};
 
-    signupBtn.onclick = ()=>{
-      const username=document.getElementById('signupUsername').value;
-      const email=document.getElementById('signupEmail').value;
-      const password=document.getElementById('signupPassword').value;
-      if(username && email && password){saveUser({username,email});updateAuthState();}
-    }
+loginBtn.onclick=()=>{
+  const email=document.getElementById('loginEmail').value;
+  const password=document.getElementById('loginPassword').value;
+  const remember=document.getElementById('rememberMe').checked;
+  if(email && password){saveUser({email},remember);updateAuthState();}
+}
 
-    updateAuthState();
+signupBtn.onclick=()=>{
+  const username=document.getElementById('signupUsername').value;
+  const email=document.getElementById('signupEmail').value;
+  const password=document.getElementById('signupPassword').value;
+  const remember=document.getElementById('signupRememberMe').checked;
+  if(username && email && password){saveUser({username,email},remember);updateAuthState();}
+}
 
-    // --------- SIDEBAR & TABS ----------
-    const sidebarToggle=document.getElementById('sidebarToggle');
-    const sidebar=document.getElementById('sidebar');
-    const tabs=document.querySelectorAll('#sidebar ul li');
-    const tabSections=document.querySelectorAll('.tab-section');
+updateAuthState();
 
-    sidebarToggle.onclick = ()=>{sidebar.classList.toggle('collapsed');};
+/* --- SIDEBAR & TABS --- */
+const sidebarToggle=document.getElementById('sidebarToggle');
+const sidebar=document.getElementById('sidebar');
+const tabs=document.querySelectorAll('#sidebar ul li');
+const tabSections=document.querySelectorAll('.tab-section');
+sidebarToggle.onclick=()=>{sidebar.classList.toggle('collapsed');};
+tabs.forEach(tab=>{
+  tab.onclick=()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const target=tab.getAttribute('data-tab');
+    tabSections.forEach(s=>s.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+  }
+});
 
-    tabs.forEach(tab=>{
-      tab.onclick=()=>{
-        tabs.forEach(t=>t.classList.remove('active'));
-        tab.classList.add('active');
-        const target=tab.getAttribute('data-tab');
-        tabSections.forEach(s=>s.classList.remove('active'));
-        document.getElementById(target).classList.add('active');
-      }
-    });
+/* --- WALLET --- */
+let balance=0;
+const currencySelect=document.getElementById('currencySelect');
+const userBalance=document.getElementById('userBalance');
+const currencySymbol=document.getElementById('currencySymbol');
+const addFundsBtn=document.getElementById('addFundsBtn');
+const paymentModal=document.getElementById('paymentModal');
+const confirmPayment=document.getElementById('confirmPayment');
+const paymentAmount=document.getElementById('paymentAmount');
 
-    // --------- DASHBOARD LOGIC ----------
-    let balance=0;
-    const currencySelect=document.getElementById('currencySelect');
-    const userBalance=document.getElementById('userBalance');
-    const currencySymbol=document.getElementById('currencySymbol');
-    const addFundsBtn=document.getElementById('addFundsBtn');
-    const paymentModal=document.getElementById('paymentModal');
-    const confirmPayment=document.getElementById('confirmPayment');
-    const paymentAmount=document.getElementById('paymentAmount');
-    const paymentBonusText=document.getElementById('paymentBonusText');
+function updateBalanceDisplay(){
+  userBalance.textContent=balance.toFixed(2);
+  const cur=currencySelect.value;
+  currencySymbol.textContent=cur==='NGN'?'₦':cur==='USDT'?'₮':'$';
+}
 
-    function updateBalanceDisplay(){
-      userBalance.textContent = balance.toFixed(2);
-      const cur = currencySelect.value;
-      currencySymbol.textContent = cur==='NGN'?'₦':cur==='USDT'?'₮':'$';
-    }
+currencySelect.onchange=updateBalanceDisplay;
+addFundsBtn.onclick=()=>{paymentModal.style.display='flex';};
+confirmPayment.onclick=()=>{
+  let amt=parseFloat(paymentAmount.value);
+  if(amt>0){balance+=amt*1.1; paymentModal.style.display='none'; paymentAmount.value=''; updateBalanceDisplay();}
+}
+</script>
 
-    currencySelect.onchange = updateBalanceDisplay;
+<script>
+/* --- NOTIFICATIONS --- */
+const notification=document.getElementById('notification');
+function showNotification(msg,duration=3000){
+  notification.textContent=msg;
+  notification.style.display='block';
+  setTimeout(()=>{notification.style.display='none';},duration);
+}
 
-    addFundsBtn.onclick = ()=>{paymentModal.style.display='flex';};
-    confirmPayment.onclick = ()=>{
-      let amt = parseFloat(paymentAmount.value);
-      if(amt>0){
-        // Apply bonus 10% as example
-        balance+=amt*1.1;
-        paymentModal.style.display='none';
-        paymentAmount.value='';
-        updateBalanceDisplay();
-      }
-    }
+/* --- SERVICES & ORDERS --- */
+const serviceSelection=document.getElementById('serviceSelection');
+const platformCards=document.querySelectorAll('.cards .card');
+const ordersList=document.getElementById('ordersList');
 
-    // --------- SERVICES & ORDER FORM ----------
-    const serviceSelection=document.getElementById('serviceSelection');
-    const platformCards=document.querySelectorAll('.cards .card');
+const platformsData={
+  tiktok:{types:['Likes','Views','Shares','Comments'],
+          max:{Likes:5000000,Views:10000000,Shares:2000000,Comments:1000000},
+          bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]},
+  instagram:{types:['Followers','Likes','Views','Comments'],
+             max:{Followers:5000000,Likes:5000000,Views:10000000,Comments:1000000},
+             bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]},
+  youtube:{types:['Subscribers','Views','Likes'],
+           max:{Subscribers:1000000,Views:10000000,Likes:1000000},
+           bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]},
+  telegram:{types:['Members','Views'],max:{Members:500000,Views:2000000},
+            bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]},
+  spotify:{types:['Plays','Followers'],max:{Plays:1000000,Followers:100000},
+           bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]}
+};
 
-    const platformsData={
-      tiktok:{types:['Likes','Views','Shares','Comments'],bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]},
-      instagram:{types:['Followers','Likes','Views','Comments'],bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]},
-      youtube:{types:['Subscribers','Views','Likes'],bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]},
-      telegram:{types:['Members','Views'],bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]},
-      spotify:{types:['Plays','Followers'],bundles:[{name:'Basic',mult:1},{name:'Premium',mult:1.2},{name:'Lifetime',mult:2}]}
-    };
+let orders=[];
 
-    platformCards.forEach(card=>{
-      card.onclick=()=>{
-        const platform=card.getAttribute('data-platform');
-        renderPlatform(platform);
-        tabs.forEach(t=>t.classList.remove('active'));
-        document.querySelector('[data-tab="servicesTab"]').classList.add('active');
-        tabSections.forEach(s=>s.classList.remove('active'));
-        document.getElementById('servicesTab').classList.add('active');
-      }
-    });
+platformCards.forEach(card=>{
+  card.onclick=()=>{
+    const platform=card.getAttribute('data-platform');
+    renderPlatform(platform);
+    // Switch tab to Services
+    tabs.forEach(t=>t.classList.remove('active'));
+    document.querySelector('[data-tab="servicesTab"]').classList.add('active');
+    tabSections.forEach(s=>s.classList.remove('active'));
+    document.getElementById('servicesTab').classList.add('active');
+  }
+});
 
-    function renderPlatform(platform){
-      const data=platformsData[platform];
-      let html=`<p>Select type:</p><select id="typeSelect"><option value="">--Choose--</option>`;
-      data.types.forEach(t=>{html+=`<option value="${t}">${t}</option>`;});
-      html+=`</select><div id="bundleSection" style="margin-top:15px;"></div>
-             <div id="quantitySection" style="margin-top:15px;"></div>
-             <button id="placeOrderBtn" class="btn" style="margin-top:15px;">Place Order</button>`;
-      serviceSelection.innerHTML=html;
+function renderPlatform(platform){
+  const data=platformsData[platform];
+  let html=`<p>Select type:</p><select id="typeSelect"><option value="">--Choose--</option>`;
+  data.types.forEach(t=>{html+=`<option value="${t}">${t}</option>`;});
+  html+=`</select><div id="bundleSection" style="margin-top:15px;"></div>
+         <div id="quantitySection" style="margin-top:15px;"></div>
+         <button id="placeOrderBtn" class="btn" style="margin-top:15px;">Place Order</button>`;
+  serviceSelection.innerHTML=html;
 
-      const typeSelect=document.getElementById('typeSelect');
-      const bundleSection=document.getElementById('bundleSection');
-      const quantitySection=document.getElementById('quantitySection');
-      const placeOrderBtn=document.getElementById('placeOrderBtn');
-      let selectedType='';
-      let selectedBundle='';
-      let quantity=0;
-      typeSelect.onchange=()=>{
-        selectedType=typeSelect.value;
-        let bundleHtml=`<p>Select bundle:</p><select id="bundleSelect"><option value="">--Choose--</option>`;
-        data.bundles.forEach((b,i)=>{bundleHtml+=`<option value="${i}">${b.name}</option>`;});
-        bundleHtml+=`</select>`;
-        bundleSection.innerHTML=bundleHtml;
+  const typeSelect=document.getElementById('typeSelect');
+  const bundleSection=document.getElementById('bundleSection');
+  const quantitySection=document.getElementById('quantitySection');
+  const placeOrderBtn=document.getElementById('placeOrderBtn');
 
-        const bundleSelect=document.getElementById('bundleSelect');
-        bundleSelect.onchange=()=>{
-          selectedBundle=bundleSelect.value;
-          let quantityHtml=`<p>Quantity:</p><input type="number" id="quantityInput" placeholder="Enter quantity"/>`;
-          quantitySection.innerHTML=quantityHtml;
+  let selectedType='', selectedBundle='', quantity=0;
 
-          const quantityInput=document.getElementById('quantityInput');
-          quantityInput.oninput=()=>{
-            quantity=parseInt(quantityInput.value);
-            if(quantity>0){
-              const mult=data.bundles[selectedBundle].mult;
-              const price=(quantity*2*mult); // formula-based proportional pricing
-              placeOrderBtn.textContent=`Place Order - ${price.toFixed(2)} ${currencySelect.value==='NGN'?'₦':currencySelect.value==='USDT'?'₮':'$'}`;
-            }
-          }
+  typeSelect.onchange=()=>{
+    selectedType=typeSelect.value;
+    if(!selectedType){bundleSection.innerHTML=''; quantitySection.innerHTML=''; return;}
+    let bundleHtml=`<p>Select bundle:</p><select id="bundleSelect"><option value="">--Choose--</option>`;
+    data.bundles.forEach((b,i)=>{bundleHtml+=`<option value="${i}">${b.name}</option>`;});
+    bundleHtml+=`</select>`;
+    bundleSection.innerHTML=bundleHtml;
+
+    const bundleSelect=document.getElementById('bundleSelect');
+    bundleSelect.onchange=()=>{
+      selectedBundle=bundleSelect.value;
+      if(selectedBundle===''){quantitySection.innerHTML=''; return;}
+      let maxQty=data.max[selectedType] || 10000;
+      let quantityHtml=`<p>Quantity (Max ${maxQty}):</p><input type="number" id="quantityInput" placeholder="Enter quantity" min="1" max="${maxQty}"/>`;
+      quantitySection.innerHTML=quantityHtml;
+
+      const quantityInput=document.getElementById('quantityInput');
+      quantityInput.oninput=()=>{
+        quantity=parseInt(quantityInput.value);
+        if(quantity>maxQty){quantity=maxQty; quantityInput.value=maxQty;}
+        if(quantity>0){
+          const mult=data.bundles[selectedBundle].mult;
+          const price=quantity*2*mult;
+          placeOrderBtn.textContent=`Place Order - ${price.toFixed(2)} ${currencySelect.value==='NGN'?'₦':currencySelect.value==='USDT'?'₮':'$'}`;
         }
       }
-
-      placeOrderBtn.onclick=()=>{
-        if(selectedType && selectedBundle && quantity>0){
-          const mult=data.bundles[selectedBundle].mult;
-          const price=(quantity*2*mult);
-          if(balance>=price){
-            balance-=price;
-            updateBalanceDisplay();
-            alert(`Order placed: ${platform} - ${selectedType} x ${quantity}, cost ${price.toFixed(2)} ${currencySelect.value}`);
-          }else{alert('Insufficient balance');}
-        }else{alert('Please select type, bundle, and quantity');}
-      }
     }
+  }
 
-  </script>
-</body>
-</html>
+  placeOrderBtn.onclick=()=>{
+    if(!selectedType || selectedBundle==='' || quantity<=0){showNotification('Please select type, bundle, and quantity'); return;}
+    const mult=data.bundles[selectedBundle].mult;
+    const price=quantity*2*mult;
+    if(balance>=price){
+      balance-=price; updateBalanceDisplay();
+      orders.push({platform,type:selectedType,bundle:data.bundles[selectedBundle].name,quantity,price,currency:currencySelect.value});
+      renderOrders();
+      showNotification(`Order placed: ${platform} - ${selectedType} x ${quantity}, cost ${price.toFixed(2)} ${currencySelect.value}`);
+    }else{showNotification('Insufficient balance');}
+  }
+}
 
+function renderOrders(){
+  if(orders.length===0){ordersList.textContent='No orders yet.'; return;}
+  let html='<ul>';
+  orders.forEach(o=>{
+    html+=`<li>${o.platform} - ${o.type} (${o.bundle}) x ${o.quantity} = ${o.price.toFixed(2)} ${o.currency}</li>`;
+  });
+  html+='</ul>';
+  ordersList.innerHTML=html;
+}
+</script>
