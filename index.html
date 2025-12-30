@@ -1,263 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHANTOM OS | Forensic Neural Core</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --gold: #d4af37; --bg: #020202; --card: #0d0d0d; --border: #1a1a1a; --red: #ff3333; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Roboto, sans-serif; transition: all 0.2s ease-in-out; }
-        body { background: var(--bg); color: #e0e0e0; height: 100vh; overflow: hidden; }
+  <meta charset="UTF-8" />
+  <title>Mainstream — Social Growth Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        /* 1. AUTH GATE & LOGIN */
-        #authGate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .secret-trigger { position: absolute; top: 0; right: 0; width: 80px; height: 80px; z-index: 10000; cursor: default; }
-        .auth-box { background: var(--card); border: 1px solid var(--border); width: 100%; max-width: 400px; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 0 30px rgba(212, 175, 55, 0.1); }
-        .auth-tabs { display: flex; justify-content: space-around; margin-bottom: 30px; border-bottom: 1px solid var(--border); }
-        .auth-tabs span { padding: 10px; cursor: pointer; color: #555; font-size: 12px; font-weight: bold; }
-        .auth-tabs span.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
-        input, select { width: 100%; padding: 15px; margin-bottom: 15px; background: #050505; border: 1px solid #222; color: var(--gold); border-radius: 8px; outline: none; }
-        .btn-gold { width: 100%; padding: 16px; background: var(--gold); color: #000; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-        /* 2. UI STRUCTURE */
-        #appBody { display: none; height: 100vh; flex-direction: column; }
-        .header { height: 70px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; background: #000; }
-        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100vh; background: #000; z-index: 5000; border-right: 1px solid var(--border); padding-top: 80px; overflow-y: auto; }
-        .sidebar.active { left: 0; box-shadow: 10px 0 50px #000; }
-        .side-item { padding: 18px 25px; border-bottom: 1px solid #0a0a0a; display: flex; align-items: center; gap: 15px; cursor: pointer; color: #888; font-size: 14px; }
-        .side-item:hover, .side-item.active { color: var(--gold); background: #050505; }
-        .drop-menu { display: none; background: #050505; padding-left: 20px; }
-        .drop-menu.show { display: block; }
+  <style>
+    :root {
+      --bg: #0e1117;
+      --card: #161b22;
+      --accent: #4da3ff;
+      --text: #e6edf3;
+      --muted: #9ba3af;
+      --radius: 14px;
+    }
 
-        /* 3. VIEWS & CARDS */
-        .content { flex: 1; padding: 30px; overflow-y: auto; }
-        .view { display: none; }
-        .view.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 15px; margin-bottom: 20px; }
-        
-        /* 4. SETTINGS GRID (30+ TOOLS) */
-        .grid-30 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .tool-card { background: #050505; border: 1px solid #1a1a1a; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; font-size: 11px; color: #777; }
-        .tool-card i { font-size: 18px; color: var(--gold); margin-bottom: 8px; }
-        .tool-card:hover { border-color: var(--gold); color: #fff; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
 
-        /* 5. MODAL SYSTEM */
-        #modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: none; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card); border: 1px solid var(--gold); padding: 35px; border-radius: 20px; width: 90%; max-width: 450px; text-align: center; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
 
-        /* 6. AI INTERFACE */
-        #chat { height: 350px; overflow-y: auto; padding: 15px; border: 1px solid #1a1a1a; margin-bottom: 10px; border-radius: 10px; font-size: 13px; }
-        .crit-alert { color: var(--red); font-weight: bold; border: 2px solid var(--red); padding: 10px; margin: 10px 0; border-radius: 5px; }
-    </style>
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: #0b0f14;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    nav a {
+      margin-left: 20px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero h2 {
+      font-size: 42px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: auto;
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 40px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .stat {
+      background: var(--card);
+      padding: 25px;
+      border-radius: var(--radius);
+      text-align: center;
+    }
+
+    .stat h3 {
+      font-size: 28px;
+      color: var(--accent);
+    }
+
+    .stat p {
+      color: var(--muted);
+    }
+
+    /* SERVICES */
+    .section {
+      padding: 60px 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .section h2 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 25px;
+      border-radius: var(--radius);
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border: 1px solid var(--accent);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .locked {
+      margin-top: 15px;
+      font-size: 13px;
+      color: var(--accent);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--muted);
+      border-top: 1px solid #1f2937;
+    }
+  </style>
 </head>
-<body onload="checkSession()">
+<body>
 
-    <div id="modal">
-        <div class="modal-content">
-            <h2 id="mTitle" style="color:var(--gold); margin-bottom:15px;">ACTION REQUIRED</h2>
-            <p id="mDesc" style="font-size:14px; margin-bottom:25px; line-height:1.6;"></p>
-            <button class="btn-gold" id="mBtn">CONFIRM</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#555; margin-top:15px; cursor:pointer;">DISMISS</button>
-        </div>
+<header>
+  <h1>Mainstream</h1>
+  <nav>
+    <a href="#">Login</a>
+    <a href="#">Sign Up</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Grow your social presence — intelligently.</h2>
+  <p>
+    Boost followers, likes, views, and engagement across all major platforms
+    using a fast, reliable, and professional system.
+  </p>
+  <div class="buttons">
+    <button class="btn">Get Started</button>
+    <button class="btn secondary">View Services</button>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat">
+    <h3>12,450+</h3>
+    <p>Users</p>
+  </div>
+  <div class="stat">
+    <h3>1.2M+</h3>
+    <p>Orders Completed</p>
+  </div>
+  <div class="stat">
+    <h3>320+</h3>
+    <p>Active Services</p>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Available Platforms</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Instagram</h3>
+      <p>Followers, Likes, Views, Reels, Comments</p>
+      <div class="locked">Login to Order</div>
     </div>
-
-    <div id="authGate">
-        <div class="secret-trigger" onclick="countTaps()"></div>
-        <div class="auth-box">
-            <div class="auth-tabs">
-                <span id="tabUp" class="active" onclick="setMode('signup')">SIGN UP</span>
-                <span id="tabIn" onclick="setMode('signin')">SIGN IN</span>
-            </div>
-            <h1 style="color:var(--gold); letter-spacing:5px; margin-bottom:5px;">PHANTOM</h1>
-            <p style="font-size:9px; color:#444; margin-bottom:30px;">NEURAL CORE v5.5 | GITHUB CONNECTED</p>
-            <input type="text" id="nodeName" placeholder="Node Username">
-            <input type="password" placeholder="Access Key">
-            <button class="btn-gold" onclick="login()">INITIALIZE CORE</button>
-        </div>
+    <div class="card">
+      <h3>TikTok</h3>
+      <p>Followers, Views, Likes, Shares</p>
+      <div class="locked">Login to Order</div>
     </div>
-
-    <div id="appBody">
-        <div class="header">
-            <i class="fas fa-bars" onclick="toggleSide()" style="color:var(--gold); cursor:pointer; font-size:22px;"></i>
-            <div style="color:var(--gold); font-weight:900; letter-spacing:4px;">PHANTOM OS</div>
-            <i class="fas fa-power-off" onclick="logout()" style="color:var(--red); cursor:pointer;"></i>
-        </div>
-
-        <nav class="sidebar" id="sidebar">
-            <div class="side-item active" onclick="nav('v-dash')"><i class="fas fa-microchip"></i> Dashboard</div>
-            <div class="side-item" onclick="nav('v-ai')"><i class="fas fa-robot"></i> AI Forensic Agent</div>
-            <div class="side-item" onclick="nav('v-engine')"><i class="fas fa-rocket"></i> Launch Engine</div>
-            <div class="side-item" onclick="nav('v-history')"><i class="fas fa-list"></i> Order History</div>
-            <div class="side-item" onclick="nav('v-sub')"><i class="fas fa-crown"></i> Subscription</div>
-            <div class="side-item" onclick="nav('v-about')"><i class="fas fa-info-circle"></i> About Core</div>
-            
-            <div class="side-item" onclick="toggleDrop()"><i class="fas fa-cog"></i> Settings <i class="fas fa-chevron-down" style="margin-left:auto;"></i></div>
-            <div class="drop-menu" id="setDrop">
-                <div class="side-item" onclick="nav('v-set-normal')">Normal Settings</div>
-                <div class="side-item" onclick="nav('v-set-adv')" style="color:var(--gold);">Advanced Node</div>
-            </div>
-
-            <div id="adminPanel" class="side-item" style="display:none; color:var(--gold);" onclick="nav('v-admin')"><i class="fas fa-user-secret"></i> ADMIN CONSOLE</div>
-        </nav>
-
-        <div class="content">
-            <div id="v-dash" class="view active">
-                <div class="card">
-                    <h4 style="font-size:11px; color:#555;">GLOBAL NODE REVENUE</h4>
-                    <div style="font-size:32px; color:var(--gold); font-weight:900;">$128,402.00</div>
-                </div>
-                <div class="card">
-                    <h4 style="font-size:11px; color:#555;">BEP20 DEPOSIT ADDR (BSC)</h4>
-                    <p style="font-size:12px; color:var(--gold); word-break:break-all;">0x71C464312f23b3517f6220E49410E7f6220E4941</p>
-                </div>
-                <button class="btn-gold" onclick="nav('v-engine')">SOCIAL BOOSTING HUB</button>
-            </div>
-
-            <div id="v-ai" class="view">
-                <h3>AI FORENSIC AGENT</h3>
-                <div class="card">
-                    <div id="chat">
-                        <div style="color:var(--gold)">[SYSTEM]: Bridge Online. Forensic analysis standby.</div>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" id="chatIn" placeholder="Query the AI Agent..." style="margin:0;">
-                        <button onclick="sendAi()" class="btn-gold" style="width:60px;"><i class="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="v-engine" class="view">
-                <h3>LAUNCH ENGINE</h3>
-                <div class="card">
-                    <label style="font-size:10px; color:var(--gold);">PLATFORM SERVICE</label>
-                    <select id="boostSrv">
-                        <optgroup label="AUDIOMACK">
-                            <option>Audiomack Plays</option><option>Audiomack Followers</option><option>Audiomack Likes</option>
-                        </optgroup>
-                        <optgroup label="TIKTOK">
-                            <option>TikTok Followers</option><option>TikTok Likes</option><option>TikTok Views</option><option>TikTok Shares</option><option>TikTok Saves</option>
-                        </optgroup>
-                        <optgroup label="YOUTUBE">
-                            <option>YouTube Views</option><option>YouTube Likes</option><option>YouTube Subscribers</option><option>YouTube Watch Time</option>
-                        </optgroup>
-                    </select>
-                    <input type="text" id="target" placeholder="Target URL / Link">
-                    <input type="number" id="qty" value="50" min="1">
-                    <p style="font-size:9px; color:#555; margin-bottom:15px;">SAFETY LIMIT: Minimum 50 units per batch.</p>
-                    <button class="btn-gold" onclick="executeBatch()">INITIALIZE GITHUB REMOTE</button>
-                </div>
-            </div>
-
-            <div id="v-history" class="view">
-                <h3>ORDER HISTORY</h3>
-                <div class="card" id="historyTable">
-                    <table style="width:100%; text-align:left; font-size:12px;">
-                        <tr style="color:var(--gold); border-bottom:1px solid #333;"><th>SERVICE</th><th>QTY</th><th>STATUS</th></tr>
-                        <tr style="border-bottom:1px solid #111;"><td style="padding:10px 0;">TikTok Followers</td><td>5,000</td><td style="color:#00ff00;">LIVE</td></tr>
-                    </table>
-                </div>
-            </div>
-
-            <div id="v-about" class="view">
-                <h3>ABOUT PHANTOM OS</h3>
-                <div class="card" style="line-height:1.8; font-size:14px;">
-                    <p style="color:var(--gold); font-weight:bold; margin-bottom:15px;">FORENSIC NEURAL CORE v5.5</p>
-                    <p>Phantom OS is a node-shifting execution environment designed for high-frequency growth forensics. By leveraging distributed neural bridges, the system ensures organic engagement across TikTok, YouTube, and Audiomack.</p>
-                    <p style="margin-top:20px;">The visual interface and modular branding assets were meticulously engineered using the <strong>CorelDRAW Graphics Suite</strong> to ensure forensic-level clarity and technical precision. Every asset is a custom vector rendered for the Phantom framework.</p>
-                </div>
-            </div>
-
-            <div id="v-set-adv" class="view">
-                <h3>ADVANCED NODE CONFIG</h3>
-                <div class="grid-30">
-                    <script>
-                        const tools = ["IP Scrambler", "Proxy Rotate", "Wallet Clone", "Node Shift", "Packet Mask", "SSL Bypass", "Traffic Inject", "Hash Cracker", "DB Wipe", "API Overwrite", "User Ban", "Fee Mod", "Audit Log", "Handshake Fix", "Header Reset", "Latency Cut", "Bot Filter", "Geo Spoofer", "VPN Tunnel", "Key Log", "Meta Scrub", "Cache Flush", "Port Scan", "Ghost Mode", "Firewall Off", "DNS Route", "Salt Hash", "Admin Sync", "Core Update", "Log Eraser", "Auto Exit"];
-                        tools.forEach(t => {
-                            document.write(`<div class="tool-card" onclick="openTool('${t}')"><i class="fas fa-microchip"></i><br>${t}</div>`);
-                        });
-                    </script>
-                </div>
-            </div>
-        </div>
+    <div class="card">
+      <h3>YouTube</h3>
+      <p>Subscribers, Watch Time, Likes</p>
+      <div class="locked">Login to Order</div>
     </div>
+    <div class="card">
+      <h3>X / Twitter</h3>
+      <p>Followers, Retweets, Likes</p>
+      <div class="locked">Login to Order</div>
+    </div>
+    <div class="card">
+      <h3>Telegram</h3>
+      <p>Members, Post Views</p>
+      <div class="locked">Login to Order</div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        let taps = 0;
-        function countTaps() {
-            taps++;
-            if(taps === 7) {
-                let key = prompt("ADMIN ACCESS KEY:");
-                if(key === "2025_SECURE") {
-                    localStorage.setItem('is_admin', 'true');
-                    alert("Admin Privileges Granted.");
-                    location.reload();
-                }
-                taps = 0;
-            }
-        }
+<footer>
+  © 2025 Mainstream. All rights reserved.
+</footer>
 
-        function checkSession() {
-            if(localStorage.getItem('p_logged')) {
-                document.getElementById('authGate').style.display = 'none';
-                document.getElementById('appBody').style.display = 'flex';
-                if(localStorage.getItem('is_admin')) document.getElementById('adminPanel').style.display = 'flex';
-            }
-        }
-
-        function login() { localStorage.setItem('p_logged', 'true'); checkSession(); }
-        function logout() { localStorage.clear(); location.reload(); }
-        function toggleSide() { document.getElementById('sidebar').classList.toggle('active'); }
-        function toggleDrop() { document.getElementById('setDrop').classList.toggle('show'); }
-
-        function nav(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(window.innerWidth < 800) toggleSide();
-        }
-
-        function openTool(name) {
-            document.getElementById('mTitle').innerText = name.toUpperCase();
-            document.getElementById('mDesc').innerText = `Initializing ${name} forensic module... This process shifts the node through secondary proxies via the BEP20 network bridge.`;
-            document.getElementById('modal').style.display = 'flex';
-            document.getElementById('mBtn').onclick = () => { alert(name + " Active."); closeModal(); };
-        }
-
-        function sendAi() {
-            let input = document.getElementById('chatIn').value;
-            let chat = document.getElementById('chat');
-            if(!input) return;
-            chat.innerHTML += `<div style="text-align:right; margin:10px 0; color:#777;">${input}</div>`;
-            if(input.toLowerCase().includes("error")) {
-                chat.innerHTML += `<div class="crit-alert">CRITICAL ALERT: Node sequence interrupted. Forensic Alert sent to Admin Email.</div>`;
-            } else {
-                chat.innerHTML += `<div style="color:var(--gold); margin-bottom:10px;">[AI]: Analyzing "${input}"... Node integrity verified.</div>`;
-            }
-            document.getElementById('chatIn').value = "";
-            chat.scrollTop = chat.scrollHeight;
-        }
-
-        function executeBatch() {
-            let qty = document.getElementById('qty').value;
-            if(qty < 50) {
-                alert("SAFETY VIOLATION: Minimum batch size is 50.");
-                return;
-            }
-            document.getElementById('mTitle').innerText = "REMOTE EXECUTION";
-            document.getElementById('mDesc').innerText = "Validating batch... Connection established with GitHub Remote. Proceed?";
-            document.getElementById('modal').style.display = 'flex';
-            document.getElementById('mBtn').onclick = () => {
-                window.location.href = "https://booster-ss.github.io/boo/actions";
-            };
-        }
-
-        function closeModal() { document.getElementById('modal').style.display = 'none'; }
-        function setMode(m) {
-            document.getElementById('tabUp').className = m==='signup'?'active':'';
-            document.getElementById('tabIn').className = m==='signin'?'active':'';
-        }
-    </script>
 </body>
-    </html>
-    
+</html>
